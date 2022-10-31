@@ -1,0 +1,70 @@
+= 概述
+:website: https://peacetrue.github.io
+:app-group: com.github.peacetrue.gradle
+:app-name: peacetrue-gradle
+:foresight-repo-id: 0b5b9f6d-d862-4826-92f2-5e31b27aecee
+:imagesdir: docs/antora/modules/ROOT/assets/images
+:tilde: ~~
+
+image:https://img.shields.io/github/workflow/status/peacetrue/{app-name}/build/master["GitHub Workflow Status",link="https://github.com/peacetrue/{app-name}/actions"]
+image:https://snyk.io/test/github/peacetrue/{app-name}/badge.svg["Snyk",link="https://app.snyk.io/org/peacetrue"]
+image:https://api-public.service.runforesight.com/api/v1/badge/success?repoId={foresight-repo-id}["Foresight",link="https://foresight.thundra.io/repositories/github/peacetrue/{app-name}/test-runs"]
+image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codecov",link="https://app.codecov.io/gh/peacetrue/{app-name}"]
+image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=peacetrue-gradle-plugin&server=https%3A%2F%2Foss.sonatype.org%2F["peacetrue-gradle-plugin",link="https://search.maven.org/search?q=peacetrue-gradle-plugin"]
+
+//@formatter:off
+
+== 简介（What）
+
+{website}/{app-name}/[{app-name}] 是一个 https://gradle.org[Gradle^] 扩展资源库，包含：
+
+. 常用初始化脚本
+. 构建约定插件
+
+== 背景（Why）
+
+在使用 Gradle 构建项目时，会有一些通用配置，
+比如：在 repositories 中添加阿里云仓库、配置测试使用 Junit5 等等。
+为了简化 build.gradle 中的配置内容，使用初始化脚本和构建约定插件封装项目间的通用配置。
+
+== 用法（How）
+
+=== 初始化脚本
+
+安装初始化脚本：
+
+[source%nowrap,bash,subs="specialchars,attributes"]
+----
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-gradle/master/install.sh)"
+----
+
+=== 构建约定插件
+
+执行构建约定插件：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "{app-group}:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "com.github.peacetrue.gradle.build-convention"
+----
+
+== 参与者（Who）
+
+. peace(xiayouxue@hotmail.com)
+
+== 活动（When）
+
+初始提交于 2022-05-02，最近提交于 2022-10-31。
+
+== 许可证（License）
+
+https://github.com/peacetrue/{app-name}/blob/master/LICENSE[Apache License 2.0^]

@@ -1,0 +1,22 @@
+apply from: "base.gradle"
+
+gradlePlugin {
+    plugins {
+        buildConventionPlugin {
+            id = "${group}.build-convention"
+            displayName = "peacetrue gradle convention plugin"
+            description = "Everything you need to configure your project as agreed"
+            implementationClass = "com.github.peacetrue.gradle.plugin.BuildConventionPlugin"
+        }
+
+        testArtifactsPlugin {
+            id = "${group}.test-artifacts"
+            displayName = "peacetrue test artifacts plugin"
+            description = "Test source code can be used as a dependent class library"
+            implementationClass = "com.github.peacetrue.gradle.plugin.TestArtifactsPlugin"
+        }
+    }
+}
+
+
+

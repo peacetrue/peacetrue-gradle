@@ -1,0 +1,71 @@
+= 编写 Gradle 插件
+
+== 插件的 2 种引用方法
+
+== 插件的工作原理
+
+== 插件的实现方式
+
+[source%nowrap,groovy]
+----
+plugins {
+    id "java-gradle-plugin"
+}
+----
+
+插件规范问题
+
+[source%nowrap,logger]
+----
+Execution failed for task ':peacetrue-gradle-plugin:publishPlugins'.
+> -SNAPSHOT plugin versions not supported, please use a fixed version instead.
+----
+
+[source%nowrap,logger]
+----
+Execution failed for task ':peacetrue-gradle-plugin:publishPlugins'.
+> Invalid plugin ID 'peacetrue-test-artifacts': Plugin IDs should be namespaced, e.g. 'com.example.peacetrue-test-artifacts'
+----
+
+[source%nowrap,logger]
+----
+Execution failed for task ':peacetrue-gradle-plugin:publishPlugins'.
+> Failed to post to server.
+  Server responded with:
+  Group id must not start with 'com.github', it should be replaced with 'io.github'
+----
+
+[source%nowrap,logger]
+----
+Execution failed for task ':peacetrue-gradle-plugin:publishPlugins'.
+> Failed to post to server.
+  Server responded with:
+  Plugin id 'com.github.peacetrue.gradle-convention' and group id 'io.github.peacetrue.gradle' must use same top level namespace, like 'io.github.peacetrue' or 'com.github'
+----
+
+[source%nowrap,logger]
+----
+Publishing plugin io.github.peacetrue.gradle-convention version 1.0.0
+Thank you. Your new plugin io.github.peacetrue.gradle-convention has been submitted for approval by Gradle engineers. The request should be processed within the next few days, at which point you will be contacted via email.
+Publishing plugin io.github.peacetrue.test-artifacts version 1.0.0
+Publishing artifact build/libs/peacetrue-gradle-plugin-1.0.0.jar
+Publishing artifact build/publications/pluginMaven/module.json
+Activating plugin io.github.peacetrue.gradle-convention version 1.0.0
+Activating plugin io.github.peacetrue.test-artifacts version 1.0.0
+----
+
+image::image-2022-06-25-03-17-43-027.png[]
+
+image::image-2022-06-25-03-22-41-251.png[]
+
+image::image-2022-06-25-03-25-01-946.png[]
+
+image::image-2022-06-25-03-25-28-939.png[]
+
+
+[source%nowrap,logger]
+----
+Execution failed for task ':peacetrue-gradle-plugin:publishMavenJavaPublicationToMavenRepository'.
+> Failed to publish publication 'mavenJava' to repository 'maven'
+   > Could not PUT 'https://oss.sonatype.org/content/repositories/snapshots/io/github/peacetrue/gradle/peacetrue-gradle-plugin/1.0.0-SNAPSHOT/maven-metadata.xml'. Received status code 403 from server: Forbidden
+----

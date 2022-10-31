@@ -1,0 +1,78 @@
+= 用户手册
+
+== 初始化脚本
+
+\...
+
+== 构建约定插件
+
+=== 启用插件
+
+==== buildscript 配置
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "{app-group}:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "com.github.peacetrue.gradle.build-convention"
+----
+
+==== plugins 配置
+
+此插件未发布至 Gradle 官方插件库，无法直接使用 plugins { } 语法，需要先配置插件源。
+
+.setting.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.namespace == "com.github.peacetrue.gradle") {
+                useModule("${requested.id.namespace}:peacetrue-gradle-plugin:${requested.version}")
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
+    }
+}
+----
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+plugins {
+    id "com.github.peacetrue.gradle.build-convention" version "\{latest-version}"
+}
+----
+
+=== 插件功能
+
+. 配置常用资源库
+. 配置常用 BOM
+. 添加常用类库
+. 启用覆盖率测试
+. 启用聚合单元测试
+. 启用聚合覆盖率测试
+
+=== 配置插件
+
+插件的默认配置如下，可在项目的 gradle.properties 中修改：
+
+.gradle.properties
+[source%nowrap,properties,subs="specialchars"]
+----
+include::example$build-convention.properties[]
+----

@@ -1,0 +1,77 @@
+def logName = "init.d/publish.gradle"
+
+gradle.afterProject { project ->
+    if (Boolean.TRUE.equals(project.findProperty("isPublishDisabled"))) return
+
+    println("$logName: execute script for project '${project.name}'")
+
+    project.apply plugin: "java"
+    project.apply plugin: "maven-publish"
+    project.java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
+    def rootProjectName = project.rootProject.name
+
+    project.publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from project.components.java
+                pom {
+                    name = project.name
+                    description = project.description
+
+                    url = "https://peacetrue.github.io/$rootProjectName/index.html"
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = "peace"
+                            name = "peace"
+                            email = "xiayouxue@hotmail.com"
+                        }
+                    }
+
+                    scm {
+                        connection = "scm:git:git://github.com/peacetrue/${rootProjectName}.git"
+                        developerConnection = "scm:git:ssh://github.com/peacetrue/${rootProjectName}.git"
+                        //FailureMessage	Invalid POM: /com/github/peacetrue/gradle/1.0.0/gradle-1.0.0.pom: SCM URL missing
+                        url = "https://github.com/peacetrue/${rootProjectName}.git"
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                url = project.version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = "${System.env.ossrhUsername}"
+                    password = "${System.env.ossrhPassword}"
+                }
+            }
+        }
+    }
+
+    project.apply plugin: "signing"
+    project.ext.setProperty("signing.keyId", "${System.env.signingKeyId}")
+    project.ext.setProperty("signing.password", "${System.env.signingPassword}")
+    project.ext.setProperty("signing.secretKeyRingFile", "${System.env.signingSecretKeyRingFile}")
+    project.signing {
+        sign project.publishing.publications.mavenJava
+    }
+
+    project.javadoc {
+        if (JavaVersion.current().isJava9Compatible()) {
+            options.addBooleanOption('html5', true)
+        }
+    }
+}

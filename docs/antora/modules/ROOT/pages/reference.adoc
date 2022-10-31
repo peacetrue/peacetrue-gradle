@@ -1,0 +1,9 @@
+= 参考指南
+
+插件实现内容与以下构建脚本类似：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars"]
+----
+include::example$build-convention.gradle[]
+----

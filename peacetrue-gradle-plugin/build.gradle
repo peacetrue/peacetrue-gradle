@@ -1,0 +1,6 @@
+description "Gradle 插件"
+
+dependencies {
+    compileOnly gradleApi()
+    testImplementation gradleApi()
+}

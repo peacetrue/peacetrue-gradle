@@ -1,0 +1,7 @@
+apply plugin: "java"
+apply from: "base.gradle"
+
+dependencies {
+    compileOnly gradleApi()
+    testImplementation gradleApi()
+}

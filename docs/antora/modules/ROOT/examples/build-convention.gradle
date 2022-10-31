@@ -1,0 +1,148 @@
+plugins {
+    // Java 类库插件
+    id "java-library"
+    // IDEA 插件
+    id "idea"
+    // 覆盖率报告插件
+    id "jacoco"
+    // 聚合测试报告插件，合并子项目中测试报告到根项目中
+    id "test-report-aggregation"
+    // 聚合覆盖率报告插件，合并子项目中覆盖率报告到根项目中
+    id "jacoco-report-aggregation"
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        //快照仓库
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        //阿里云仓库
+        maven { url "https://maven.aliyun.com/nexus/content/groups/public" }
+    }
+
+    dependencies {
+        // 添加 peacetrue-dependencies BOM，默认启用，可以手动关闭
+        if ("false" != project.findProperty("peaceDependenciesEnabled")) {
+            if (!project.hasProperty("peaceDependenciesVersion")) ext.peaceDependenciesVersion = "2.0.8"
+            implementation platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
+            compileOnly platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
+            annotationProcessor platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
+
+            // 默认添加 3 个通用依赖
+            implementation "com.google.code.findbugs:jsr305"
+            compileOnly "org.projectlombok:lombok"
+            annotationProcessor "org.projectlombok:lombok"
+        }
+
+        // 添加 spring-boot-dependencies BOM，默认关闭，可以手动启用
+        if ("true" == project.findProperty("springBootDependenciesEnabled")) {
+            if (!project.hasProperty("springBootDependenciesVersion")) ext.springBootDependenciesVersion = "2.0.0.RELEASE"
+            implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
+            compileOnly platform("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
+            annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
+        }
+
+        // 添加 spring-data-bom，默认关闭，可以手动启用
+        if ("true" == project.findProperty("springDataDependenciesEnabled")) {
+            if (!project.hasProperty("springDataDependenciesVersion")) ext.springDataDependenciesVersion = "2021.0.0"
+            implementation platform("org.springframework.data:spring-data-bom:${springDataDependenciesVersion}")
+            compileOnly platform("org.springframework.data:spring-data-bom:${springDataDependenciesVersion}")
+            annotationProcessor platform("org.springframework.data:spring-data-bom:${springDataDependenciesVersion}")
+        }
+
+        // 无条件添加以下 BOM 到测试依赖中
+        testImplementation platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
+        testAnnotationProcessor platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
+        testImplementation platform("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
+        testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
+        testImplementation platform("org.springframework.data:spring-data-bom:${springDataDependenciesVersion}")
+        testAnnotationProcessor platform("org.springframework.data:spring-data-bom:${springDataDependenciesVersion}")
+
+        // 无条件添加以下类库到测试依赖中
+        testImplementation "org.junit.jupiter:junit-jupiter-api"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
+        testImplementation "org.mockito:mockito-inline"
+        testImplementation "org.mockito:mockito-junit-jupiter"
+        testImplementation "org.unitils:unitils-core"
+        testImplementation "org.jeasy:easy-random-core"
+        testCompileOnly "org.projectlombok:lombok"
+        testAnnotationProcessor "org.projectlombok:lombok"
+        testImplementation "ch.qos.logback:logback-classic"
+        testImplementation "org.yaml:snakeyaml"
+        testImplementation "com.google.guava:guava"
+        testImplementation "org.jooq:jool-java-8"
+        testImplementation "com.github.peacetrue:peacetrue-test"
+    }
+
+    apply plugin: "java-library"
+    sourceCompatibility = 8
+    targetCompatibility = 8
+    java {
+        withSourcesJar()
+        withJavadocJar()
+    }
+
+    apply plugin: "idea"
+    idea {
+        module {
+            inheritOutputDirs = false
+            outputDir = tasks.compileJava.destinationDir
+            testOutputDir = tasks.compileTestJava.destinationDir
+            downloadSources = false
+            downloadJavadoc = false
+        }
+    }
+
+    // 执行覆盖率测试
+    apply plugin: "jacoco"
+    test {
+        onlyIf {
+            !project.hasProperty("skipTest")
+        }
+        // 使用 Junit5
+        useJUnitPlatform()
+        // 单元测试完成后，执行覆盖率测试
+        finalizedBy jacocoTestReport
+    }
+    jacocoTestReport {
+        dependsOn test
+        reports {
+            xml.enabled true
+            html.enabled true
+        }
+    }
+}
+
+// 子项目 GAV 与根项目相同，子项目可后续修改覆盖
+subprojects {
+    group = project.group
+    version = project.version
+    description = project.description
+}
+
+// 聚合测试报告，将子项目的测试报告统一汇总到根项目中
+test.finalizedBy("testAggregateTestReport")
+testAggregateTestReport.finalizedBy("aggregateTestResults")
+task aggregateTestResults(group: "peacetrue") {
+    doLast {
+        copy {
+            from subprojects*.layout*.buildDirectory*.dir("test-results")
+            into layout.buildDirectory.dir("test-results")
+        }
+    }
+}
+
+// 聚合覆盖率报告，将子项目的覆盖率报告统一汇总到根项目中
+test.finalizedBy("testCodeCoverageReport")
+testCodeCoverageReport.finalizedBy("renameAggregateJacocoTestReport")
+task renameAggregateJacocoTestReport(group: "peacetrue") {
+    doLast {
+        copy {
+            // 与子项目覆盖率报告命名保持一致
+            from("${buildDir}/reports/jacoco/testCodeCoverageReport")
+            into("${buildDir}/reports/jacoco/test")
+            rename("testCodeCoverageReport.xml", "jacocoTestReport.xml")
+        }
+    }
+}

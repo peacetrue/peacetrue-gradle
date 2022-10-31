@@ -1,0 +1,13 @@
+plugins {
+    id "java-gradle-plugin"
+    id "maven-publish"
+    id "com.gradle.plugin-publish" version "0.18.0"
+}
+
+apply from: "plugin.gradle"
+
+pluginBundle {
+    website = "https://peacetrue.cn/summarize/peacetrue-gradle/index.html"
+    vcsUrl = "https://github.com/peacetrue/peacetrue-gradle.git"
+    tags = ["peacetrue", "convention", "test"]
+}

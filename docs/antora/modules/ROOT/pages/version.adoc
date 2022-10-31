@@ -1,0 +1,25 @@
+= 版本变更
+
+:numbered!: ''
+
+== 1.0.0
+
+实现插件：
+
+* `com.github.peacetrue.gradle.build-convention`
+* `com.github.peacetrue.gradle.test-artifacts`
+
+== 1.1.0
+
+//测试的 spring-boot 版本需支持 flyway 自动创建。
+
+build-convention 插件在多模块项目中支持聚合报告，添加 jacoco-report-aggregation、test-report-aggregation 插件。
+
+== 1.1.1
+
+添加 renameAggregateJacocoTestReport 任务。
+
+== 1.1.2
+
+规范 BOM 配置属性。
+
