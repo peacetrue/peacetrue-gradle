@@ -7,18 +7,19 @@ set -e
 echo "workingDir: $workingDir"
 # 确定现在是快照还是发行版本
 # gradle.properties 中检查
-projects=("gradle" "dependencies" "beans" "common" "cryptography" "validation" "servlet" "spring" "result" "test" "tplngn" "template")
-#projects=("tplngn" "template")
-#projects=("gradle")
+#projects=("gradle" "dependencies" "beans" "common" "cryptography" "validation" "servlet" "persistence" "spring" "result" "test" "tplngn" "template")
+#projects=("gradle" "dependencies" "beans" "common" "spring" "tplngn" "template")
+projects=("gradle" "dependencies")
+# projects=("dependencies")
 echo "projects: ${projects[*]}"
 projectCount=${#projects[*]}
 echo "projectCount: $projectCount"
-for ((i = 0; i < projectCount; i++)); do
-  cd "$workingDir/peacetrue-${projects[$i]}" || exit
+for project in ${projects[@]}; do
+  cd "$workingDir/peacetrue-$project" || exit
   echo "project: $(pwd)"
 #  ./gradlew clean build
-  ./gradlew clean build publishToMavenLocal publish
-#  ./gradlew clean build publishToMavenLocal publish
+#   ./gradlew clean build publishToMavenLocal
+ ./gradlew clean build publishToMavenLocal publish
 #  ./gradlew clean build publishToMavenLocal publish
 done
 

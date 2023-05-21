@@ -239,8 +239,8 @@ public class BuildConventionPlugin implements Plugin<Project> {
         logger.info("apply {}", BuildConventionPlugin.class.getSimpleName());
 
         if (project == project.getRootProject()) {
-            Collection<Project> children = project.getChildProjects().values();
-            if (children.isEmpty()) {
+            Set<Project> subprojects = project.getSubprojects();
+            if (subprojects.isEmpty()) {
                 logger.info("for RootProject(single): {}", project);
                 applyInner(project);
             } else {
@@ -250,7 +250,7 @@ public class BuildConventionPlugin implements Plugin<Project> {
                 configurePlatformDependencies(project);
                 applyTestReportAggregationPlugin(project);
                 applyJacocoReportAggregationPlugin(project);
-                configureChildren(project);
+                configureSubprojects(project);
             }
         } else {
             logger.info("for SubProject: {}", project);
@@ -411,9 +411,11 @@ public class BuildConventionPlugin implements Plugin<Project> {
         Map<String, ?> properties = project.getProperties();
         DependencyHandler dependencyHandler = project.getDependencies();
         List<Dependency> dependencies = new LinkedList<>();
-        dependencies.add(new DefaultDependency(properties, "com.github.peacetrue:peacetrue-dependencies", "2.0.8", true, "peaceDependenciesVersion", "peaceDependenciesEnabled", true));
+        // org.springframework.cloud:spring-cloud-dependencies:2021.0.6
+        dependencies.add(new DefaultDependency(properties, "com.github.peacetrue:peacetrue-dependencies", "2.0.9", true, "peaceDependenciesVersion", "peaceDependenciesEnabled", true));
         dependencies.add(new DefaultDependency(properties, "org.springframework.boot:spring-boot-dependencies", "2.0.0.RELEASE", false, "springBootDependenciesVersion", "springBootDependenciesEnabled", false));
         dependencies.add(new DefaultDependency(properties, "org.springframework.data:spring-data-bom", "2021.0.0", false, "springDataDependenciesVersion", "springDataDependenciesEnabled", false));
+        dependencies.add(new DefaultDependency(properties, "org.springframework.cloud:spring-cloud-dependencies", "2021.0.6", false, "springCloudDependenciesVersion", "springCloudDependenciesEnabled", false));
         for (Dependency dependency : dependencies) {
             // 非测试，根据配置添加
             if (dependency.enabled()) {
@@ -428,17 +430,17 @@ public class BuildConventionPlugin implements Plugin<Project> {
         }
     }
 
-    private void configureChildren(Project project) {
-        project.getChildProjects().forEach((name, childProject) -> {
-            prepareSubproject(childProject);
-            childProject.setGroup(project.getGroup());
-            childProject.setVersion(project.getVersion());
-            childProject.setDescription(project.getDescription());
-            childProject.getPluginManager().apply(BuildConventionPlugin.class);
+    private void configureSubprojects(Project project) {
+        project.getSubprojects().forEach(subproject -> {
+            prepareSubproject(subproject);
+            subproject.setGroup(project.getGroup());
+            subproject.setVersion(project.getVersion());
+            subproject.setDescription(project.getDescription());
+            subproject.getPluginManager().apply(BuildConventionPlugin.class);
         });
 
-        project.getChildProjects().forEach((name, childProject) -> {
-            childProject.afterEvaluate(item -> {
+        project.getSubprojects().forEach(subproject -> {
+            subproject.afterEvaluate(item -> {
                 if (!item.hasProperty("skipTest")) {
                     // 用于主项目中生成覆盖率测试
                     project.getDependencies().add(IMPLEMENTATION_CONFIGURATION_NAME, item);
@@ -474,7 +476,7 @@ public class BuildConventionPlugin implements Plugin<Project> {
             task.setGroup("peacetrue");
             task.doLast(it -> {
                 project.copy(copySpec -> copySpec
-                        .from(childrenBuildSubdir(project, "test-results"))
+                        .from(subprojectsBuildSubdir(project, "test-results"))
                         .include("**/*.xml")
                         .into(buildSubdir(project, "test-results"))
                 );
@@ -482,8 +484,8 @@ public class BuildConventionPlugin implements Plugin<Project> {
         });
     }
 
-    private static Set<Provider<Directory>> childrenBuildSubdir(Project project, String path) {
-        return project.getChildProjects().values().stream()
+    private static Set<Provider<Directory>> subprojectsBuildSubdir(Project project, String path) {
+        return project.getSubprojects().stream()
                 .map(item -> buildSubdir(item, path))
                 .collect(Collectors.toSet());
     }
