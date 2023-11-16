@@ -1,5 +1,12 @@
 = 参考指南
 
+构建约定插件涵盖常规项目中使用到的基本功能，包含如下特性：
+
+* 执行 Java 类库插件
+* 执行单元测试插件
+* 执行覆盖率测试插件
+
+
 插件实现内容与以下构建脚本类似：
 
 .build.gradle
@@ -7,3 +14,18 @@
 ----
 include::example$build-convention.gradle[]
 ----
+
+
+== 附录
+
+
+* https://docs.oracle.com/en/java/javase/17/docs/api/index.html
+* https://www.java.com/releases/
+* 21 LTS
+* https://github.com/spring-projects/spring-boot/releases
+* v2.7.16
+* https://github.com/spring-projects/spring-framework/releases
+* v5.3.30
+* https://docs.gradle.org/current/release-notes.html
+* 8.3
+

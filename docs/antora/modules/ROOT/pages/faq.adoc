@@ -1,0 +1,16 @@
+= 常见问题
+
+== 在 Gradle 插件中执行其他插件
+
+.内置插件直接执行：
+`project.getPluginManager().apply(JavaLibraryPlugin.class)`
+
+外部插件，需要配置依赖。如何配置依赖？
+
+* 在 `BuildConventionPlugin` 通过 `buildscript` 无效
+* 在 build.gradle 通过 implementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0' 有效
+
+// 在插件中依赖插件：https://stackoverflow.com/questions/10081299/creating-a-gradle-plugin-with-a-dependency-on-another-external-plugin
+    // Failed to apply plugin 'com.github.psxpaul.execfork': https://github.com/gradle/gradle/issues/17783
+    // Failed to apply plugin 'org.springdoc.openapi-gradle-plugin'.
+    // Task with name 'bootRun' not found in project ':peacetrue-user-application'

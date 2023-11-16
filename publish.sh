@@ -7,9 +7,10 @@ set -e
 echo "workingDir: $workingDir"
 # 确定现在是快照还是发行版本
 # gradle.properties 中检查
-#projects=("gradle" "dependencies" "beans" "common" "cryptography" "validation" "servlet" "persistence" "spring" "result" "test" "tplngn" "template")
+# projects=("gradle" "dependencies" "test" "beans" "common" "cryptography" "validation" "servlet" "persistence" "spring" "result" "test" "tplngn" "template")
+projects=( "beans" "common" "cryptography" "validation" "servlet" "persistence" "spring" "result" "test" "tplngn" "template")
 #projects=("gradle" "dependencies" "beans" "common" "spring" "tplngn" "template")
-projects=("gradle" "dependencies")
+# projects=("gradle" "dependencies")
 # projects=("dependencies")
 echo "projects: ${projects[*]}"
 projectCount=${#projects[*]}

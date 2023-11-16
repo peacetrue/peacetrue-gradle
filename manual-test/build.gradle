@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.github.peacetrue.openapitools:peacetrue-openapitools-asciidoc:1.0.0${tailSnapshot}"
+    }
+}
+
+plugins {
+    // Task with name 'bootRun' not found in root project 'manual-test'.
+    id 'org.springdoc.openapi-gradle-plugin' version '1.8.0' apply(false)
+    id 'org.openapi.generator' version '6.6.0' apply(false)
+    id "org.asciidoctor.jvm.convert" version '3.3.2' apply(false)
+    // https://github.com/springdoc/springdoc-openapi-gradle-plugin https://springdoc.org/v1/#gradle-plugin https://springdoc.org/v1/
+    // openapi 生成器：https://github.com/OpenAPITools/openapi-generator
+    id "com.github.peacetrue.gradle.build-convention" version "${peaceGradleVersion}${tailSnapshot}"
+}
+
+group "com.github.peacetrue"
+description "手动测试"
+apply plugin: "org.springdoc.openapi-gradle-plugin"
+allprojects {
+    tasks.register("show") {
+        group "peacetrue"
+        doLast {
+            print "show: ${project.group}, ${project.description}"
+        }
+    }
+}

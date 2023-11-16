@@ -1,0 +1,5 @@
+description "手动测试 asciidoctor"
+apply plugin: "org.springdoc.openapi-gradle-plugin"
+apply plugin: "org.openapi.generator"
+apply plugin: "org.asciidoctor.jvm.convert"
+

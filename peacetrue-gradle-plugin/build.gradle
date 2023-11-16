@@ -1,6 +1,34 @@
+//plugins {
+//    id 'java-gradle-plugin'
+//}
+
 description "Gradle 插件"
+repositories {
+    gradlePluginPortal()
+}
+
+configurations {
+    // https://stackoverflow.com/questions/30792268/loggerfactory-is-not-a-logback-loggercontext-but-logback-is-on-the-classpath
+    all*.exclude module: "logback-classic"
+}
+// SLF4J: Found binding in [jar:file:/Users/xiayx/.gradle/caches/8.4/generated-gradle-jars/gradle-api-8.4.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+//SLF4J: Found binding in [jar:file:/Users/xiayx/.m2/repository/ch/qos/logback/logback-classic/1.2.11/logback-classic-1.2.11.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+
 
 dependencies {
     compileOnly gradleApi()
+    compileOnly localGroovy()
+    compileOnly 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0'
+    compileOnly 'org.springdoc:springdoc-openapi-gradle-plugin:1.8.0'
+    compileOnly 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
+    // org.asciidoctor.jvm.base: org.asciidoctor.gradle.jvm.AsciidoctorJBasePlugin
+    // org.asciidoctor.jvm.convert: org.asciidoctor.gradle.jvm.AsciidoctorJPlugin
+    compileOnly 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
+
     testImplementation gradleApi()
+    // TODO 暂时无法实现可选依赖
+
+//    testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0'
+//    testImplementation 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
+    testImplementation 'org.springdoc:springdoc-openapi-gradle-plugin:1.8.0'
 }

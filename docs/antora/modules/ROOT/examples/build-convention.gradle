@@ -23,11 +23,11 @@ allprojects {
 
     dependencies {
         // 添加 peacetrue-dependencies BOM，默认启用，可以手动关闭
-        if ("false" != project.findProperty("peaceDependenciesEnabled")) {
-            if (!project.hasProperty("peaceDependenciesVersion")) ext.peaceDependenciesVersion = "2.0.8"
-            implementation platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
-            compileOnly platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
-            annotationProcessor platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
+        if ("false" != project.findProperty("peacetrueDependenciesEnabled")) {
+            if (!project.hasProperty("peacetrueDependenciesVersion")) ext.peacetrueDependenciesVersion = "2.0.8"
+            implementation platform("com.github.peacetrue:peacetrue-dependencies:${peacetrueDependenciesVersion}${tailSnapshot}")
+            compileOnly platform("com.github.peacetrue:peacetrue-dependencies:${peacetrueDependenciesVersion}${tailSnapshot}")
+            annotationProcessor platform("com.github.peacetrue:peacetrue-dependencies:${peacetrueDependenciesVersion}${tailSnapshot}")
 
             // 默认添加 3 个通用依赖
             implementation "com.google.code.findbugs:jsr305"
@@ -52,8 +52,8 @@ allprojects {
         }
 
         // 无条件添加以下 BOM 到测试依赖中
-        testImplementation platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
-        testAnnotationProcessor platform("com.github.peacetrue:peacetrue-dependencies:${peaceDependenciesVersion}${tailSnapshot}")
+        testImplementation platform("com.github.peacetrue:peacetrue-dependencies:${peacetrueDependenciesVersion}${tailSnapshot}")
+        testAnnotationProcessor platform("com.github.peacetrue:peacetrue-dependencies:${peacetrueDependenciesVersion}${tailSnapshot}")
         testImplementation platform("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
         testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}")
         testImplementation platform("org.springframework.data:spring-data-bom:${springDataDependenciesVersion}")

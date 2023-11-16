@@ -2,12 +2,11 @@
 :website: https://peacetrue.github.io
 :app-group: com.github.peacetrue.gradle
 :app-name: peacetrue-gradle
-:foresight-repo-id: 0b5b9f6d-d862-4826-92f2-5e31b27aecee
 :imagesdir: docs/antora/modules/ROOT/assets/images
 
 image:https://img.shields.io/github/actions/workflow/status/peacetrue/{app-name}/main.yml?branch=master["GitHub Workflow Status",link="https://github.com/peacetrue/{app-name}/actions"]
 image:https://snyk.io/test/github/peacetrue/{app-name}/badge.svg["Snyk",link="https://app.snyk.io/org/peacetrue"]
-image:https://api-public.service.runforesight.com/api/v1/badge/success?repoId={foresight-repo-id}["Foresight",link="https://foresight.thundra.io/repositories/github/peacetrue/{app-name}/test-runs"]
+image:https://img.shields.io/testspace/tests/peacetrue/peacetrue:{app-name}/master["test space",link="https://peacetrue.testspace.com/"]
 image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codecov",link="https://app.codecov.io/gh/peacetrue/{app-name}"]
 image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=peacetrue-gradle-plugin&server=https%3A%2F%2Foss.sonatype.org%2F["peacetrue-gradle-plugin",link="https://search.maven.org/search?q=peacetrue-gradle-plugin"]
 
