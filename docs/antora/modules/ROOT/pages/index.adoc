@@ -14,31 +14,47 @@ image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=p
 
 == 简介（What）
 
-{website}/{app-name}/[{app-name}] 是一个 https://gradle.org[Gradle^] 扩展资源库，包含：
+{website}/{app-name}/[{app-name}] 是一个针对 https://gradle.org[Gradle^] 的扩展资源库，目前包含：
 
-. 常用初始化脚本
+// . 常用初始化脚本
 . 构建约定插件
 
 == 背景（Why）
 
-在使用 Gradle 构建项目时，会有一些通用配置，
-比如：在 repositories 中添加阿里云仓库、配置测试使用 Junit5 等等。
-为了简化 build.gradle 中的配置内容，使用初始化脚本和构建约定插件封装项目间的通用配置。
+我们在使用 Gradle 构建 Java 项目时，会有一些通用配置，例如：
+
+* 在 repositories 中添加阿里云仓库，以提升类库的下载速度
+* 添加公司内部的 BOM
+* 配置测试框架为 Junit5
+* 添加覆盖率插件
+* ... 等等
+
+为了简化项目配置，使用``构建约定插件``封装项目间的通用配置。
 
 == 用法（How）
 
-=== 初始化脚本
-
-安装初始化脚本：
-
-[source%nowrap,bash,subs="specialchars,attributes"]
-----
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-gradle/master/install.sh)"
-----
+// === 初始化脚本
+//
+// 安装初始化脚本：
+//
+// [source%nowrap,bash,subs="specialchars,attributes"]
+// ----
+// /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-gradle/master/install.sh)"
+// ----
 
 === 构建约定插件
 
-执行构建约定插件：
+plugins 模式：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+plugins {
+    id "io.github.peacetrue.gradle.build-convention" version "\{latest-version}"
+}
+----
+
+buildscript 模式：
 
 .build.gradle
 [source%nowrap,gradle,subs="specialchars,attributes"]
@@ -52,16 +68,27 @@ buildscript {
     }
 }
 
-apply plugin: "com.github.peacetrue.gradle.build-convention"
+apply plugin: "io.github.peacetrue.gradle.build-convention"
 ----
+
+最新版本请查看页面顶部版本徽章。
+
+== 特性
+
+.概述
+* 支持单模块资源库（资源库中仅含一个模块）和多模块资源库（资源库中含多个模块），每个模块都会应用插件（除了下述例外）
+* 多模块资源库时，根模块需被闲置，不应有任何用途，也不会被应用插件；子模块会强制继承根模块的 group、version
+* 为每个模块添加常规插件、配置资源库、配置平台依赖（BOM）、配置主依赖、配置测试依赖
+* 支持使用配置选项控制插件执行逻辑
+* 支持按约定配置指定插件，如果检测到存在该插件
 
 == 参与者（Who）
 
-. peace(xiayouxue@hotmail.com)
+. peacetrue(xiayouxue@hotmail.com)
 
 == 活动（When）
 
-初始提交于 2022-05-02，最近提交于 2023-05-21。
+初始提交于 2022-05-02，最近提交于 {localdate}。
 
 == 许可证（License）
 

@@ -1,2 +1,30 @@
 = 快速入门
 
+== 构建约定插件
+
+plugins 模式：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+plugins {
+    id "io.github.peacetrue.gradle.build-convention" version "\{latest-version}"
+}
+----
+
+buildscript 模式：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "{app-group}:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "io.github.peacetrue.gradle.build-convention"
+----

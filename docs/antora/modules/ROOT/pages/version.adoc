@@ -29,5 +29,7 @@ build-convention 插件在多模块项目中支持聚合报告，添加 jacoco-r
 
 == 1.2.0
 
-
+* 支持按约定配置指定插件，如果检测到存在该插件
+* Gradle 版本升级到 8.4
+* 发布插件到 gradlePluginPortal
 

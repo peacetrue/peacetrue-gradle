@@ -1,8 +1,10 @@
 package com.github.peacetrue.gradle.plugin;
 
+import org.codehaus.groovy.runtime.MethodClosure;
 import org.gradle.api.JavaVersion;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
+import org.gradle.api.artifacts.ModuleDependency;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.file.Directory;
@@ -224,17 +226,12 @@ import static org.gradle.api.plugins.JavaPlugin.*;
  **/
 public class BuildConventionPlugin implements Plugin<Project> {
 
-    private static final String SPRING_BOOT_PLUGIN_ENABLED = "springBootPluginEnabled";
-    static final String SPRINGDOC_OPENAPI_PLUGIN_ENABLED = "springdocOpenapiPluginEnabled";
-    private static final String OPENAPI_GENERATOR_PLUGIN_ENABLED = "openapiGeneratorPluginEnabled";
-
     private static final String PEACETRUE_DEPENDENCIES_ENABLED = "peacetrueDependenciesEnabled";
     private static final String SPRING_BOOT_DEPENDENCIES_ENABLED = "springBootDependenciesEnabled";
     private static final String SPRING_DATA_DEPENDENCIES_ENABLED = "springDataDependenciesEnabled";
     private static final String SPRING_CLOUD_DEPENDENCIES_ENABLED = "springCloudDependenciesEnabled";
 
     private static final String RUNTIME_JAVADOC_ENABLED = "runtimeJavadocEnabled";
-    static final String SPRINGDOC_OPENAPI_ENABLED = "springdocOpenapiEnabled";
 
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -314,6 +311,10 @@ public class BuildConventionPlugin implements Plugin<Project> {
             });
         });
     }
+
+    private static final String SPRING_BOOT_PLUGIN_ENABLED = "springBootPluginEnabled";
+    private static final String SPRINGDOC_OPENAPI_PLUGIN_ENABLED = "springdocOpenapiPluginEnabled";
+    private static final String OPENAPI_GENERATOR_PLUGIN_ENABLED = "openapiGeneratorPluginEnabled";
 
     @Deprecated
     private void applyConfiguredPlugin(Project project) {
@@ -448,7 +449,6 @@ public class BuildConventionPlugin implements Plugin<Project> {
         List<Dependency> dependencies = new LinkedList<>();
         // org.springframework.cloud:spring-cloud-dependencies:2021.0.6
         dependencies.add(new DefaultDependency(properties, "com.github.peacetrue:peacetrue-dependencies", "2.0.9", true, "peacetrueDependenciesVersion", PEACETRUE_DEPENDENCIES_ENABLED, true));
-
         dependencies.add(new DefaultDependency(properties, "org.springframework.boot:spring-boot-dependencies", "2.0.0.RELEASE", false, "springBootDependenciesVersion", SPRING_BOOT_DEPENDENCIES_ENABLED, false));
         dependencies.add(new DefaultDependency(properties, "org.springframework.data:spring-data-bom", "2021.0.0", false, "springDataDependenciesVersion", SPRING_DATA_DEPENDENCIES_ENABLED, false));
         dependencies.add(new DefaultDependency(properties, "org.springframework.cloud:spring-cloud-dependencies", "2021.0.6", false, "springCloudDependenciesVersion", SPRING_CLOUD_DEPENDENCIES_ENABLED, false));
@@ -491,27 +491,43 @@ public class BuildConventionPlugin implements Plugin<Project> {
 
     }
 
-    private static void configureTestDependencies(Project project) {
+    private void configureTestDependencies(Project project) {
         DependencyHandler dependencyHandler = project.getDependencies();
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-api");
-        dependencyHandler.add(TEST_RUNTIME_ONLY_CONFIGURATION_NAME, "org.junit.jupiter:junit-jupiter-engine");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "com.github.peacetrue:peacetrue-test");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.jeasy:easy-random-core");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.unitils:unitils-core");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.mockito:mockito-inline");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.mockito:mockito-junit-jupiter");
+        String implementationConfigurationName = TEST_IMPLEMENTATION_CONFIGURATION_NAME;
+        String runtimeOnlyConfigurationName = TEST_RUNTIME_ONLY_CONFIGURATION_NAME;
+        // 如果是测试子模块，将测试依赖转变为实现依赖。
+        if (project.getRootProject() != project && project.getName().endsWith("-test")) {
+            implementationConfigurationName = IMPLEMENTATION_CONFIGURATION_NAME;
+            runtimeOnlyConfigurationName = RUNTIME_ONLY_CONFIGURATION_NAME;
+        }
+        dependencyHandler.add(implementationConfigurationName, "org.junit.jupiter:junit-jupiter-api");
+        dependencyHandler.add(runtimeOnlyConfigurationName, "org.junit.jupiter:junit-jupiter-engine");
+        dependencyHandler.add(implementationConfigurationName, "com.github.peacetrue:peacetrue-test");
+        dependencyHandler.add(implementationConfigurationName, "org.jeasy:easy-random-core");
+        // java lambda to groovy Closure
+        dependencyHandler.add(implementationConfigurationName, "org.jeasy:easy-random-bean-validation", new MethodClosure(this, "_exclude"));
+        dependencyHandler.add(implementationConfigurationName, "org.hibernate.validator:hibernate-validator");
+        dependencyHandler.add(implementationConfigurationName, "org.apache.tomcat.embed:tomcat-embed-el");
+        dependencyHandler.add(implementationConfigurationName, "org.unitils:unitils-core");
+        dependencyHandler.add(implementationConfigurationName, "org.mockito:mockito-inline");
+        dependencyHandler.add(implementationConfigurationName, "org.mockito:mockito-junit-jupiter");
         dependencyHandler.add(TEST_COMPILE_ONLY_CONFIGURATION_NAME, "org.projectlombok:lombok");
         dependencyHandler.add(TEST_ANNOTATION_PROCESSOR_CONFIGURATION_NAME, "org.projectlombok:lombok");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "ch.qos.logback:logback-classic");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.yaml:snakeyaml");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "com.google.guava:guava");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.jooq:jool-java-8");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.awaitility:awaitility");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "io.projectreactor:reactor-test");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.springframework.restdocs:spring-restdocs-mockmvc");
-        dependencyHandler.add(TEST_IMPLEMENTATION_CONFIGURATION_NAME, "org.springframework.restdocs:spring-restdocs-restassured");
+        dependencyHandler.add(implementationConfigurationName, "ch.qos.logback:logback-classic");
+        dependencyHandler.add(implementationConfigurationName, "org.yaml:snakeyaml");
+        dependencyHandler.add(implementationConfigurationName, "com.google.guava:guava");
+        dependencyHandler.add(implementationConfigurationName, "org.jooq:jool-java-8");
+        dependencyHandler.add(implementationConfigurationName, "org.awaitility:awaitility");
+        dependencyHandler.add(implementationConfigurationName, "io.projectreactor:reactor-test");
+        dependencyHandler.add(implementationConfigurationName, "org.springframework.restdocs:spring-restdocs-mockmvc");
+        dependencyHandler.add(implementationConfigurationName, "org.springframework.restdocs:spring-restdocs-restassured");
     }
 
+    private void _exclude(ModuleDependency dependency) {
+        // exclude group: "org.yaml", module: "snakeyaml"
+        // dependency.exclude(Collections.singletonMap("group", "org.yaml"));
+        dependency.exclude(Collections.singletonMap("module", "snakeyaml"));
+    }
 
     private void configureSubprojects(Project project) {
         // 项目 build.gradle 执行完后，项目的 mvn 坐标属性 已设置，然后设置子项目的 mvn 坐标属性。

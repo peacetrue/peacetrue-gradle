@@ -1,10 +1,8 @@
 package com.github.peacetrue.gradle.plugin;
 
-import lombok.SneakyThrows;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.artifacts.dsl.DependencyHandler;
-import org.slf4j.LoggerFactory;
 import org.springdoc.openapi.gradle.plugin.OpenApiExtension;
 
 import java.util.Arrays;
@@ -21,7 +19,6 @@ class OpenApiGradlePluginConfigure implements Plugin<Project> {
 
     // private final org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
-    @SneakyThrows
     public void apply(Project project) {
         DependencyHandler dependencyHandler = project.getDependencies();
         dependencyHandler.add(IMPLEMENTATION_CONFIGURATION_NAME, "org.springdoc:springdoc-openapi-ui");

@@ -1,23 +1,69 @@
 = 参考指南
 
-构建约定插件涵盖常规项目中使用到的基本功能，包含如下特性：
+== 源码结构
 
-* 执行 Java 类库插件
-* 执行单元测试插件
-* 执行覆盖率测试插件
+NOTE: 以下按逻辑顺序归类排列而非文件系统顺序。
 
+.未归类
+* .gitignore
+* LICENSE
 
-插件实现内容与以下构建脚本类似：
+.文档相关
+* docs
+* README.adoc
 
-.build.gradle
-[source%nowrap,gradle,subs="specialchars"]
-----
-include::example$build-convention.gradle[]
-----
+.构建和发布相关
+* Makefile
+* build.common.mk
 
+.模块
+* peacetrue-gradle-plugin：Gradle 插件
+
+== 构建约定插件
+
+* ``单模块资源库根模块和多模块资源库非根模块``执行如下插件：
+.. `JavaLibraryPlugin`
+.. `JacocoPlugin`
+.. `IdeaPlugin`
+* ``多模块资源库根模块``执行如下插件：
+.. `JavaLibraryPlugin`
+.. `TestReportAggregationPlugin`
+.. `JacocoReportAggregationPlugin`
+.. `IdeaPlugin`
+* 配置资源库：
+** mavenLocal：~/.m2
+** mavenCentral： https://repo.maven.apache.org/maven2/
+** https://oss.sonatype.org/content/repositories/snapshots/
+** https://maven.aliyun.com/nexus/content/groups/public/
+** https://repo.spring.io/milestone/
+* 配置平台依赖：
+** peacetrueDependenciesEnabled：`com.github.peacetrue:peacetrue-dependencies:${peacetrueDependenciesVersion}`
+** springBootPluginEnabled：`org.springframework.boot:spring-boot-dependencies:${springBootDependenciesVersion}`
+** springDataDependenciesEnabled：`org.springframework.data:spring-data-bom:${springDataDependenciesVersion}`
+** springCloudDependenciesEnabled：`org.springframework.cloud:spring-cloud-dependencies:${springCloudDependenciesVersion}`
+* 配置主依赖：
+** peacetrueDependenciesEnabled
+*** org.projectlombok:lombok
+*** com.google.code.findbugs:jsr305
+** runtimeJavadocEnabled：runtimeJavadocPackages=com.github.peacetrue
+*** `com.github.therapi:therapi-runtime-javadoc`
+*** `com.github.therapi:therapi-runtime-javadoc-scribe`
+* 配置测试依赖：
+** org.junit.jupiter:junit-jupiter-api
+** org.junit.jupiter:junit-jupiter-engine
+** com.github.peacetrue:peacetrue-test
+** org.jeasy:easy-random-core
+** org.jeasy:easy-random-bean-validation
+** org.hibernate.validator:hibernate-validator
+** org.apache.tomcat.embed:tomcat-embed-el
+** org.mockito:mockito-inline
+** org.mockito:mockito-junit-jupiter
+* 按约定配置插件：
+** OpenApiGradlePlugin
+** OpenApiGeneratorPlugin
+** AsciidoctorJPlugin
 
 == 附录
-
 
 * https://docs.oracle.com/en/java/javase/17/docs/api/index.html
 * https://www.java.com/releases/
@@ -28,4 +74,4 @@ include::example$build-convention.gradle[]
 * v5.3.30
 * https://docs.gradle.org/current/release-notes.html
 * 8.3
-
+* https://plugins.gradle.org/u/peacetrue?tab=publishing[Gradle 插件个人中心^]

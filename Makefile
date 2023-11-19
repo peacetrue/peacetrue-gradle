@@ -18,3 +18,7 @@ manual-test-asciidoctor: peacetrue-gradle-plugin
 
 peacetrue-gradle-plugin.publishToMavenLocal:
 	./gradlew :peacetrue-gradle-plugin:publishToMavenLocal
+
+# 发布插件，需提前在本地配置秘钥 https://plugins.gradle.org/u/peacetrue
+publishPlugins:
+	./gradlew peacetrue-gradle-plugin:publishPlugins -Pgradle.publish.key=$(gradlePublishKey) -Pgradle.publish.secret=$(gradlePublishSecret)

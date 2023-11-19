@@ -14,3 +14,7 @@
     // Failed to apply plugin 'com.github.psxpaul.execfork': https://github.com/gradle/gradle/issues/17783
     // Failed to apply plugin 'org.springdoc.openapi-gradle-plugin'.
     // Task with name 'bootRun' not found in project ':peacetrue-user-application'
+
+== Plugin pending approval
+
+see https://discuss.gradle.org/t/plugin-pending-approval/28869.
