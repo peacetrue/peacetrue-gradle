@@ -22,3 +22,16 @@ peacetrue-gradle-plugin.publishToMavenLocal:
 # 发布插件，需提前在本地配置秘钥 https://plugins.gradle.org/u/peacetrue
 publishPlugins:
 	./gradlew peacetrue-gradle-plugin:publishPlugins -Pgradle.publish.key=$(gradlePublishKey) -Pgradle.publish.secret=$(gradlePublishSecret)
+
+
+# 测试生命周期
+lifecycle:
+#	cd samples/lifecycle && ./gradlew :test # 执行根项目测试
+	cd samples/lifecycle && ./gradlew lifecycle-module:test -Dlifecycle.test=true
+
+# make build/lifecycle.tree
+$(BUILD)/lifecycle.tree: $(BUILD)
+	cd samples && tree lifecycle > ../$@
+# make build/lifecycle.log
+$(BUILD)/lifecycle.log: $(BUILD)
+	cd samples/lifecycle && ./gradlew lifecycle-module:test -Dlifecycle.test=true > ../../$@

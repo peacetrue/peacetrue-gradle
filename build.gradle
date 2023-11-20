@@ -1,6 +1,6 @@
 plugins {
     // 使用上一版本的 <构建约定插件> 构建自己
-    id "com.github.peacetrue.gradle.build-convention" version "${peaceGradlePrevVersion}-SNAPSHOT" apply(false)
+    id "com.github.peacetrue.gradle.build-convention" version "${peaceGradlePrevVersion}" apply(false)
 }
 
 group "com.github.peacetrue.gradle"

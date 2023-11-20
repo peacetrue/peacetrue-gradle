@@ -1,0 +1,6 @@
+println("settings.gradle start")
+
+rootProject.name = "lifecycle"
+include("lifecycle-module")
+
+println("settings.gradle end")

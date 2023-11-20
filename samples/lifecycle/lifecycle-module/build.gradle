@@ -1,0 +1,10 @@
+println("${project.name} build.gradle start")
+
+tasks.register('test') {
+    println("${project.name}.test init")
+    doLast {
+        println("${project.name}.test execute")
+    }
+}
+
+println("${project.name} build.gradle end")
