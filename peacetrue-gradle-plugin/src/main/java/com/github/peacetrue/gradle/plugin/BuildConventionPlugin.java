@@ -312,8 +312,11 @@ public class BuildConventionPlugin implements Plugin<Project> {
         });
     }
 
+    @Deprecated
     private static final String SPRING_BOOT_PLUGIN_ENABLED = "springBootPluginEnabled";
+    @Deprecated
     private static final String SPRINGDOC_OPENAPI_PLUGIN_ENABLED = "springdocOpenapiPluginEnabled";
+    @Deprecated
     private static final String OPENAPI_GENERATOR_PLUGIN_ENABLED = "openapiGeneratorPluginEnabled";
 
     @Deprecated
@@ -530,26 +533,27 @@ public class BuildConventionPlugin implements Plugin<Project> {
     }
 
     private void configureSubprojects(Project project) {
-        // 项目 build.gradle 执行完后，项目的 mvn 坐标属性 已设置，然后设置子项目的 mvn 坐标属性。
-        project.afterEvaluate(it -> {
-            it.getSubprojects().forEach(subproject -> {
-                subproject.setGroup(project.getGroup());
-                subproject.setVersion(project.getVersion());
-                if (subproject.getDescription() == null) subproject.setDescription(project.getDescription());
-            });
-        });
-        project.getSubprojects().forEach(subproject -> {
+        for (Project subproject : project.getSubprojects()) {
             prepareSubproject(subproject);
             applyMultiChild(subproject);
-        });
+        }
 
-        project.getSubprojects().forEach(subproject -> {
-            subproject.afterEvaluate(item -> {
-                if (!item.hasProperty("skipTest")) {
-                    // 用于主项目中生成覆盖率测试
-                    project.getDependencies().add(IMPLEMENTATION_CONFIGURATION_NAME, item);
-                }
-            });
+        // 项目 build.gradle 执行完后，项目的 mvn 坐标属性 已设置，然后设置子项目的 mvn 坐标属性。
+        project.afterEvaluate(it -> {
+            for (Project subproject : it.getSubprojects()) {
+                subproject.beforeEvaluate(ignored -> {
+                    subproject.setGroup(project.getGroup());
+                    subproject.setVersion(project.getVersion());
+                    subproject.setDescription(project.getDescription());
+                });
+
+                subproject.afterEvaluate(ignored -> {
+                    if (!subproject.hasProperty("skipTest")) {
+                        // 用于主项目中生成覆盖率测试
+                        project.getDependencies().add(IMPLEMENTATION_CONFIGURATION_NAME, subproject);
+                    }
+                });
+            }
         });
     }
 

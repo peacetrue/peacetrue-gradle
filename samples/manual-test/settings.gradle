@@ -1,5 +1,5 @@
-pluginManagement {
-    includeBuild '..'
-}
+//pluginManagement {
+//    includeBuild '..'
+//}
 rootProject.name = 'manual-test'
 include("manual-test-asciidoctor")

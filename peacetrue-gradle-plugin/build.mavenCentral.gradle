@@ -1,4 +1,4 @@
-description "build convention plugin"
+description "java build convention plugin"
 repositories {
     gradlePluginPortal()
 }
@@ -19,7 +19,8 @@ dependencies {
     compileOnly 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
 
     testImplementation gradleApi()
-//    testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0'
-//    testImplementation 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
+    testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0'
+    testImplementation 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
     testImplementation 'org.springdoc:springdoc-openapi-gradle-plugin:1.8.0'
+    testImplementation 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
 }

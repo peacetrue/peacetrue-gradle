@@ -2,36 +2,29 @@
 
 include build.common.mk
 
-# projects=gradle dependencies test beans common cryptography validation servlet persistence spring result tplngn template
+# 测试 Gradle 生命周期
+lifecycle.tail=
+lifecycle:
+	cd samples/lifecycle && ./gradlew lifecycle-module:test -Dlifecycle.test=true $(lifecycle.tail)
+$(BUILD)/lifecycle.log: $(BUILD) # make build/lifecycle.log
+	make lifecycle lifecycle.tail='> ../../$@'
 
-projects:
-	ls -ls $(workingDir) | grep peacetrue-
-
-build.%:
-	cd "$(workingDir)/peacetrue-$*" && ./gradlew build
-publishToMavenLocal.%:
-	cd "$(workingDir)/peacetrue-$*" && ./gradlew publishToMavenLocal
-
+# 测试插件
 manual-test-asciidoctor: peacetrue-gradle-plugin
 	cd manual-test && ./gradlew :manual-test-asciidoctor:openApiGenerate --debug | grep 'peacetrue-log:'
-#	cd manual-test && ./gradlew :manual-test-asciidoctor:openApiGenerate --stacktrace | grep 'peacetrue-log:'
 
-peacetrue-gradle-plugin.publishToMavenLocal:
-	./gradlew :peacetrue-gradle-plugin:publishToMavenLocal
+# 发布到本地
+projects=gradle dependencies test beans common cryptography spring validation servlet persistence result tplngn template
+publishToMavenLocal: $(addprefix publishToMavenLocal.,$(projects));
+publishToMavenLocal.gradle:
+	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle
+	./gradlew peacetrue-gradle-plugin:publishToMavenLocal
+publishToMavenLocal.%:
+	cd "$(workingDir)/peacetrue-$*" && sed -i 's/peaceGradleVersion=1.1.3/peaceGradleVersion=1.2.0/' gradle.properties && ./gradlew publishToMavenLocal
 
-# 发布插件，需提前在本地配置秘钥 https://plugins.gradle.org/u/peacetrue
+# 发布插件，需提前在本地配置秘钥 https://plugins.gradle.org/u/peacetrue，需要审核，非英文审核不过
 publishPlugins:
 	./gradlew peacetrue-gradle-plugin:publishPlugins -Pgradle.publish.key=$(gradlePublishKey) -Pgradle.publish.secret=$(gradlePublishSecret)
 
 
-# 测试生命周期
-lifecycle:
-#	cd samples/lifecycle && ./gradlew :test # 执行根项目测试
-	cd samples/lifecycle && ./gradlew lifecycle-module:test -Dlifecycle.test=true
-
-# make build/lifecycle.tree
-$(BUILD)/lifecycle.tree: $(BUILD)
-	cd samples && tree lifecycle > ../$@
-# make build/lifecycle.log
-$(BUILD)/lifecycle.log: $(BUILD)
-	cd samples/lifecycle && ./gradlew lifecycle-module:test -Dlifecycle.test=true > ../../$@
+#list-projects:; ls -ls $(workingDir) | grep peacetrue-

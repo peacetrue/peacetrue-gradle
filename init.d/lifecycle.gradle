@@ -1,9 +1,12 @@
 // 测试生命周期
 if (!System.properties.containsKey("lifecycle.test")) return
+// Gradle.properties 中没有 gradle.properties 文件中的属性
+// Project.properties 中含义 gradle.properties 文件中的属性
+
 println("init.d/lifecycle.gradle start")
 
 gradle.beforeSettings {
-    println("gradle.beforeSettings: $it")
+    println("gradle.beforeSettings: $it ${it}")
 }
 
 gradle.settingsEvaluated {
