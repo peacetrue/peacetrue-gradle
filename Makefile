@@ -14,7 +14,8 @@ manual-test-asciidoctor: peacetrue-gradle-plugin
 	cd manual-test && ./gradlew :manual-test-asciidoctor:openApiGenerate --debug | grep 'peacetrue-log:'
 
 # 发布到本地
-projects=gradle dependencies test beans common cryptography spring validation servlet persistence result tplngn template
+projects=gradle dependencies test beans common cryptography spring validation servlet persistence result tplngn template openapitools
+projects=openapitools
 publishToMavenLocal: $(addprefix publishToMavenLocal.,$(projects));
 publishToMavenLocal.gradle:
 	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle

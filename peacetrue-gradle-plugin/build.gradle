@@ -7,8 +7,8 @@ configurations {
     // https://stackoverflow.com/questions/30792268/loggerfactory-is-not-a-logback-loggercontext-but-logback-is-on-the-classpath
     all*.exclude module: "logback-classic"
 }
-//SLF4J: Found binding in [jar:file:/Users/xiayx/.gradle/caches/8.4/generated-gradle-jars/gradle-api-8.4.jar!/org/slf4j/impl/StaticLoggerBinder.class]
-//SLF4J: Found binding in [jar:file:/Users/xiayx/.m2/repository/ch/qos/logback/logback-classic/1.2.11/logback-classic-1.2.11.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+//SLF4J: Found binding in [jar:file: ~/.gradle/caches/8.4/generated-gradle-jars/gradle-api-8.4.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+//SLF4J: Found binding in [jar:file: ~/.m2/repository/ch/qos/logback/logback-classic/1.2.11/logback-classic-1.2.11.jar!/org/slf4j/impl/StaticLoggerBinder.class]
 
 dependencies {
     compileOnly gradleApi()
