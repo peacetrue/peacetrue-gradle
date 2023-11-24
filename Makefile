@@ -13,9 +13,17 @@ $(BUILD)/lifecycle.log: $(BUILD) # make build/lifecycle.log
 manual-test-asciidoctor: peacetrue-gradle-plugin
 	cd manual-test && ./gradlew :manual-test-asciidoctor:openApiGenerate --debug | grep 'peacetrue-log:'
 
-# 发布到本地
+
+# 切换
+switch.maven:
+	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle
+switch.gradle:
+	cd peacetrue-gradle-plugin && rm -rf build.gradle src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties && ln build.gradlePluginPortal.gradle build.gradle
+
 projects=gradle dependencies test beans common cryptography spring validation servlet persistence result tplngn template openapitools
-projects=openapitools
+# projects=openapitools
+
+# 发布到本地
 publishToMavenLocal: $(addprefix publishToMavenLocal.,$(projects));
 publishToMavenLocal.gradle:
 	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle

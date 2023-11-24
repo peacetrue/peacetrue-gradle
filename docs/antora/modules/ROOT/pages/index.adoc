@@ -12,7 +12,7 @@ image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=p
 
 //@formatter:off
 
-link:README.zh_CN.adoc[Chinese 中文]
+link:docs/antora/modules/ROOT/pages/index.adoc[Chinese 中文]
 
 == 简介（What）
 

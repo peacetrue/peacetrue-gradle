@@ -19,6 +19,7 @@ dependencies {
     compileOnly 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
 
     testImplementation gradleApi()
+    testImplementation gradleTestKit()
     testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0'
     testImplementation 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
     testImplementation 'org.springdoc:springdoc-openapi-gradle-plugin:1.8.0'

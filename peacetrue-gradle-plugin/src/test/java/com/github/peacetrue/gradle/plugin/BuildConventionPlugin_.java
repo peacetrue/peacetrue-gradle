@@ -35,7 +35,7 @@ import static org.gradle.api.plugins.JavaPlugin.*;
  *
  * @author peace
  **/
-public class BuildConventionPlugin implements Plugin<Project> {
+public class BuildConventionPlugin_ implements Plugin<Project> {
 
     private static final String PEACETRUE_DEPENDENCIES_ENABLED = "peacetrueDependenciesEnabled";
     private static final String SPRING_BOOT_DEPENDENCIES_ENABLED = "springBootDependenciesEnabled";
@@ -118,6 +118,31 @@ public class BuildConventionPlugin implements Plugin<Project> {
                 reports.getJunitXml().getRequired().set(true);
             });
         });
+    }
+
+    @Deprecated
+    private static final String SPRING_BOOT_PLUGIN_ENABLED = "springBootPluginEnabled";
+    @Deprecated
+    private static final String SPRINGDOC_OPENAPI_PLUGIN_ENABLED = "springdocOpenapiPluginEnabled";
+    @Deprecated
+    private static final String OPENAPI_GENERATOR_PLUGIN_ENABLED = "openapiGeneratorPluginEnabled";
+
+    @Deprecated
+    private void applyConfiguredPlugin(Project project) {
+        Map<String, ?> properties = project.getProperties();
+        boolean enablePlugins = properties.keySet().stream().anyMatch(item -> item.endsWith("PluginEnabled"));
+        if (!enablePlugins) return;
+        List<PluginDependency> dependencies = new LinkedList<>();
+        dependencies.add(new DefaultPluginDependency(properties, "org.springframework.boot:spring-boot-gradle-plugin", "2.7.0", false, "springBootPluginVersion", SPRING_BOOT_PLUGIN_ENABLED, "org.springframework.boot", JavaPlugin.class));
+        dependencies.add(new DefaultPluginDependency(properties, "org.springdoc:springdoc-openapi-gradle-plugin", "1.8.0", false, "springdocOpenapiPluginVersion", SPRINGDOC_OPENAPI_PLUGIN_ENABLED, "org.springdoc.openapi-gradle-plugin", JavaPlugin.class));
+        dependencies.add(new DefaultPluginDependency(properties, "org.openapitools:openapi-generator-gradle-plugin", "6.6.0", false, "openapiGeneratorPluginVersion", OPENAPI_GENERATOR_PLUGIN_ENABLED, "org.openapi.generator", JavaPlugin.class));
+        PluginManager pluginManager = project.getPluginManager();
+        for (PluginDependency dependency : dependencies) {
+            if (dependency.enabled()) {
+                pluginManager.apply(dependency.getPluginName());
+                project.getLogger().debug("apply plugin: {}", dependency.getPluginName());
+            }
+        }
     }
 
     private void applyIdeaPlugin(Project project) {

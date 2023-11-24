@@ -11,42 +11,33 @@ image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codec
 image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=peacetrue-gradle-plugin&server=https%3A%2F%2Foss.sonatype.org%2F["peacetrue-gradle-plugin",link="https://search.maven.org/search?q=peacetrue-gradle-plugin"]
 
 //@formatter:off
-
-link:README.adoc[English 英文]
+link:README.adoc[English] link:docs/antora/modules/ROOT/pages/index.adoc[中文]
 
 == 简介（What）
 
-{website}/{app-name}/[{app-name}] 是一个针对 https://gradle.org[Gradle^] 的扩展资源库，目前包含：
+peacetrue-gradle-plugin 用于按照约定配置 Java 项目，自动准备好测试环境。约定如下：
 
-// . 常用初始化脚本
-. 构建约定插件
+* 在所有项目中执行 `JavaLibraryPlugin`
+* 在所有项目中，配置使用 `JUnitPlatform`
+* 在子项目中添加测试类库 `org.junit.jupiter:junit-jupiter-engine`
+* 在子项目中执行 `JacocoPlugin`
+* 如果是多项目资源库，在根项目中执行 `TestReportAggregationPlugin` 和 `JacocoReportAggregationPlugin`
+
+NOTE: 资源库可能包含一个项目或多个项目，如果只包含一个项目，则根项目认为是子项目。
+
 
 == 背景（Why）
 
-我们在使用 Gradle 构建 Java 项目时，会有一些通用配置，例如：
+多个 Java 项目都需要使用类似的配置，使用插件统一处理。
 
-* 在 repositories 中添加阿里云仓库，以提升类库的下载速度
-* 添加公司内部的 BOM
-* 配置测试框架为 Junit5
-* 添加覆盖率插件
-* ... 等等
+== 先决条件
 
-为了简化项目配置，使用``构建约定插件``封装项目间的通用配置。
+最低支持的版本:
+
+* Gradle: 7.6
+* Java: 1.8
 
 == 用法（How）
-
-// === 初始化脚本
-//
-// 安装初始化脚本：
-//
-// [source%nowrap,bash,subs="specialchars,attributes"]
-// ----
-// /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/peacetrue/peacetrue-gradle/master/install.sh)"
-// ----
-
-=== 构建约定插件
-
-plugins 模式：
 
 .build.gradle
 [source%nowrap,gradle,subs="specialchars,attributes"]
@@ -56,7 +47,24 @@ plugins {
 }
 ----
 
-buildscript 模式：
+或者：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "io.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "io.github.peacetrue.gradle.build-convention"
+----
+
+或者：
 
 .build.gradle
 [source%nowrap,gradle,subs="specialchars,attributes"]
@@ -66,7 +74,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "{app-group}:peacetrue-gradle-plugin:\{latest-version}"
+        classpath "com.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
     }
 }
 
@@ -74,15 +82,6 @@ apply plugin: "io.github.peacetrue.gradle.build-convention"
 ----
 
 最新版本请查看页面顶部版本徽章。
-
-== 特性
-
-.概述
-* 支持单模块资源库（资源库中仅含一个模块）和多模块资源库（资源库中含多个模块），每个模块都会应用插件（除了下述例外）
-* 多模块资源库时，根模块需被闲置，不应有任何用途，也不会被应用插件；子模块会强制继承根模块的 group、version
-* 为每个模块添加常规插件、配置资源库、配置平台依赖（BOM）、配置主依赖、配置测试依赖
-* 支持使用配置选项控制插件执行逻辑
-* 支持按约定配置指定插件，如果检测到存在该插件
 
 == 参与者（Who）
 

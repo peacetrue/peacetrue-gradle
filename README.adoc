@@ -1,1 +1,96 @@
-docs/antora/modules/ROOT/pages/index.adoc
+= 概述
+:website: https://peacetrue.github.io
+:app-group: com.github.peacetrue.gradle
+:app-name: peacetrue-gradle
+:imagesdir: docs/antora/modules/ROOT/assets/images
+
+image:https://img.shields.io/github/actions/workflow/status/peacetrue/{app-name}/main.yml?branch=master["GitHub Workflow Status",link="https://github.com/peacetrue/{app-name}/actions"]
+image:https://snyk.io/test/github/peacetrue/{app-name}/badge.svg["Snyk",link="https://app.snyk.io/org/peacetrue"]
+image:https://img.shields.io/testspace/tests/peacetrue/peacetrue:{app-name}/master["test space",link="https://peacetrue.testspace.com/"]
+image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codecov",link="https://app.codecov.io/gh/peacetrue/{app-name}"]
+image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=peacetrue-gradle-plugin&server=https%3A%2F%2Foss.sonatype.org%2F["peacetrue-gradle-plugin",link="https://search.maven.org/search?q=peacetrue-gradle-plugin"]
+
+//@formatter:off
+link:README.adoc[English] link:docs/antora/modules/ROOT/pages/index.adoc[中文]
+
+== 简介（What）
+
+peacetrue-gradle-plugin 用于按照约定配置 Java 项目，自动准备好测试环境。约定如下：
+
+* 在所有项目中执行 `JavaLibraryPlugin`
+* 在所有项目中，配置使用 `JUnitPlatform`
+* 在子项目中添加测试类库 `org.junit.jupiter:junit-jupiter-engine`
+* 在子项目中执行 `JacocoPlugin`
+* 如果是多项目资源库，在根项目中执行 `TestReportAggregationPlugin` 和 `JacocoReportAggregationPlugin`
+
+NOTE: 资源库可能包含一个项目或多个项目，如果只包含一个项目，则根项目认为是子项目。
+
+
+== 背景（Why）
+
+多个 Java 项目都需要使用类似的配置，使用插件统一处理。
+
+== 先决条件
+
+最低支持的版本:
+
+* Gradle: 7.6
+* Java: 1.8
+
+== 用法（How）
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+plugins {
+    id "io.github.peacetrue.gradle.build-convention" version "\{latest-version}"
+}
+----
+
+或者：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "io.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "io.github.peacetrue.gradle.build-convention"
+----
+
+或者：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "io.github.peacetrue.gradle.build-convention"
+----
+
+最新版本请查看页面顶部版本徽章。
+
+== 参与者（Who）
+
+. peacetrue(xiayouxue@hotmail.com)
+
+== 活动（When）
+
+初始提交于 2022-05-02，最近提交于 {localdate}。
+
+== 许可证（License）
+
+https://github.com/peacetrue/{app-name}/blob/master/LICENSE[Apache License 2.0^]

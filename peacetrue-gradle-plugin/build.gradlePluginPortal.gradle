@@ -1,6 +1,7 @@
 plugins {
     id "java-gradle-plugin"
     id "com.gradle.plugin-publish" version "1.1.0"
+    id "pl.droidsonroids.jacoco.testkit" version "1.0.12"
 }
 
 // Group id must not start with 'com.github', it should be replaced with 'io.github'
@@ -11,16 +12,22 @@ repositories {
     gradlePluginPortal()
 }
 
+configurations {
+    // https://stackoverflow.com/questions/30792268/loggerfactory-is-not-a-logback-loggercontext-but-logback-is-on-the-classpath
+    all*.exclude module: "logback-classic"
+    all*.exclude module: "slf4j-simple"
+}
+
 dependencies {
     compileOnly gradleApi()
-    compileOnly localGroovy()
-    compileOnly 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0'
+//    compileOnly 'org.springframework.boot:spring-boot-gradle-plugin:2.7.14'
     compileOnly 'org.springdoc:springdoc-openapi-gradle-plugin:1.8.0'
     compileOnly 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
     compileOnly 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
 
     testImplementation gradleApi()
-    testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.0'
+    testImplementation gradleTestKit()
+    testImplementation 'org.springframework.boot:spring-boot-gradle-plugin:2.7.14'
     testImplementation 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
     testImplementation 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
     testImplementation 'org.springdoc:springdoc-openapi-gradle-plugin:1.8.0'
@@ -32,14 +39,14 @@ test {
 
 gradlePlugin {
     vcsUrl = "https://github.com/peacetrue/peacetrue-gradle.git"
-    website = "https://peacetrue.github.io/peacetrue-gradle/index.html"
+//    website = "https://peacetrue.github.io/peacetrue-gradle/index.html"
     plugins {
         buildConventionPlugin {
             id = "${group}.build-convention"
             displayName = "java build convention plugin"
-            description = "Everything you need to configure your java project as agreed"
+            description = "Prepare the test environment. Automatically invoke JacocoPlugin, TestReportAggregationPlugin, JacocoReportAggregationPlugin and useJUnitPlatform"
             implementationClass = "com.github.peacetrue.gradle.plugin.BuildConventionPlugin"
-            tags.set(["peacetrue", "java", "build", "convention", "plugin"])
+            tags.set(["peacetrue", "java", "build", "convention", "test", "plugin"])
         }
 
 /*
