@@ -39,14 +39,14 @@ test {
 
 gradlePlugin {
     vcsUrl = "https://github.com/peacetrue/peacetrue-gradle.git"
-//    website = "https://peacetrue.github.io/peacetrue-gradle/index.html"
+    website = "https://github.com/peacetrue/peacetrue-gradle"
     plugins {
         buildConventionPlugin {
             id = "${group}.build-convention"
             displayName = "java build convention plugin"
             description = "Prepare the test environment. Automatically invoke JacocoPlugin, TestReportAggregationPlugin, JacocoReportAggregationPlugin and useJUnitPlatform"
             implementationClass = "com.github.peacetrue.gradle.plugin.BuildConventionPlugin"
-            tags.set(["peacetrue", "java", "build", "convention", "test", "plugin"])
+            tags.set(["peacetrue", "java", "build", "convention", "test"])
         }
 
 /*
