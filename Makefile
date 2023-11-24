@@ -16,20 +16,24 @@ manual-test-asciidoctor: peacetrue-gradle-plugin
 
 # 切换
 switch.maven:
-	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle
+	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle && ln src/test/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties
 switch.gradle:
 	cd peacetrue-gradle-plugin && rm -rf build.gradle src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties && ln build.gradlePluginPortal.gradle build.gradle
 
 projects=gradle dependencies test beans common cryptography spring validation servlet persistence result tplngn template openapitools
-# projects=openapitools
+projects=gradle
 
 # 发布到本地
 publishToMavenLocal: $(addprefix publishToMavenLocal.,$(projects));
 publishToMavenLocal.gradle:
-	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle
 	./gradlew peacetrue-gradle-plugin:publishToMavenLocal
 publishToMavenLocal.%:
 	cd "$(workingDir)/peacetrue-$*" && sed -i 's/peaceGradleVersion=1.1.3/peaceGradleVersion=1.2.0/' gradle.properties && ./gradlew publishToMavenLocal
+
+publish: $(addprefix publish.,$(projects));
+publish.gradle:; ./gradlew peacetrue-gradle-plugin:publish
+publish.%:
+	cd "$(workingDir)/peacetrue-$*" && sed -i 's/peaceGradleVersion=1.1.3/peaceGradleVersion=1.2.0/' gradle.properties && ./gradlew publish
 
 # 发布插件，需提前在本地配置秘钥 https://plugins.gradle.org/u/peacetrue，需要审核，非英文审核不过
 publishPlugins:

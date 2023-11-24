@@ -1,4 +1,4 @@
-= 概述
+= Overview
 :website: https://peacetrue.github.io
 :app-group: com.github.peacetrue.gradle
 :app-name: peacetrue-gradle
@@ -11,60 +11,34 @@ image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codec
 image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=peacetrue-gradle-plugin&server=https%3A%2F%2Foss.sonatype.org%2F["peacetrue-gradle-plugin",link="https://search.maven.org/search?q=peacetrue-gradle-plugin"]
 
 //@formatter:off
-link:README.adoc[English] link:docs/antora/modules/ROOT/pages/index.adoc[中文]
+link:docs/antora/modules/ROOT/pages/index.adoc[中文]
 
-== 简介（What）
+== Introduction
 
-peacetrue-gradle-plugin 用于按照约定配置 Java 项目，自动准备好测试环境。约定如下：
+The `peacetrue-gradle-plugin` is used to configure Java projects according to conventions and automatically prepare the test environment. The conventions are as follows:
 
-* 在所有项目中执行 `JavaLibraryPlugin`
-* 在所有项目中，配置使用 `JUnitPlatform`
-* 在子项目中添加测试类库 `org.junit.jupiter:junit-jupiter-engine`
-* 在子项目中执行 `JacocoPlugin`
-* 如果是多项目资源库，在根项目中执行 `TestReportAggregationPlugin` 和 `JacocoReportAggregationPlugin`
+* Apply the `JavaLibraryPlugin` to all projects.
+* Configure the use of `JUnitPlatform` in all projects.
+* Add the test library `org.junit.jupiter:junit-jupiter-engine` in sub-projects.
+* Apply the `JacocoPlugin` to sub-projects.
+* If it is a multi-project repository, apply the `TestReportAggregationPlugin` and `JacocoReportAggregationPlugin` to the root project.
 
-NOTE: 资源库可能包含一个项目或多个项目，如果只包含一个项目，则根项目认为是子项目。
+NOTE: A repository may contain one or more projects. If it contains only one project, the root project is considered a sub-project.
 
+== Background
 
-== 背景（Why）
+Multiple Java projects often require similar configurations. Using a plugin can help standardize these configurations.
 
-多个 Java 项目都需要使用类似的配置，使用插件统一处理。
+== Prerequisites
 
-== 先决条件
-
-最低支持的版本:
+Minimum supported versions:
 
 * Gradle: 7.6
 * Java: 1.8
 
-== 用法（How）
+== Usage
 
-.build.gradle
-[source%nowrap,gradle,subs="specialchars,attributes"]
-----
-plugins {
-    id "io.github.peacetrue.gradle.build-convention" version "\{latest-version}"
-}
-----
-
-或者：
-
-.build.gradle
-[source%nowrap,gradle,subs="specialchars,attributes"]
-----
-buildscript {
-    repositories {
-        gradlePluginPortal()
-    }
-    dependencies {
-        classpath "io.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
-    }
-}
-
-apply plugin: "io.github.peacetrue.gradle.build-convention"
-----
-
-或者：
+From the mavenCentral repository (real-time):
 
 .build.gradle
 [source%nowrap,gradle,subs="specialchars,attributes"]
@@ -81,16 +55,43 @@ buildscript {
 apply plugin: "io.github.peacetrue.gradle.build-convention"
 ----
 
-最新版本请查看页面顶部版本徽章。
+From the gradlePluginPortal (delayed, subject to approval):
 
-== 参与者（Who）
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+plugins {
+    id "io.github.peacetrue.gradle.build-convention" version "\{latest-version}"
+}
+----
+
+Or:
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "io.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "io.github.peacetrue.gradle.build-convention"
+----
+
+Check the version badge at the top of the page for the latest version.
+
+== Contributors
 
 . peacetrue(xiayouxue@hotmail.com)
 
-== 活动（When）
+== Timeline
 
-初始提交于 2022-05-02，最近提交于 {localdate}。
+Initial commit on 2022-05-02, last commit on {localdate}.
 
-== 许可证（License）
+== License
 
 https://github.com/peacetrue/{app-name}/blob/master/LICENSE[Apache License 2.0^]

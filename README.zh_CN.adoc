@@ -11,11 +11,11 @@ image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codec
 image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=peacetrue-gradle-plugin&server=https%3A%2F%2Foss.sonatype.org%2F["peacetrue-gradle-plugin",link="https://search.maven.org/search?q=peacetrue-gradle-plugin"]
 
 //@formatter:off
-link:README.adoc[English] link:docs/antora/modules/ROOT/pages/index.adoc[中文]
+link:README.adoc[English]
 
 == 简介（What）
 
-peacetrue-gradle-plugin 用于按照约定配置 Java 项目，自动准备好测试环境。约定如下：
+`peacetrue-gradle-plugin` 用于按照约定配置 Java 项目，自动准备好测试环境。约定如下：
 
 * 在所有项目中执行 `JavaLibraryPlugin`
 * 在所有项目中，配置使用 `JUnitPlatform`
@@ -38,6 +38,26 @@ NOTE: 资源库可能包含一个项目或多个项目，如果只包含一个�
 * Java: 1.8
 
 == 用法（How）
+
+从 mavenCentral 资源库（实时的）：
+
+.build.gradle
+[source%nowrap,gradle,subs="specialchars,attributes"]
+----
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "com.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
+    }
+}
+
+apply plugin: "io.github.peacetrue.gradle.build-convention"
+----
+
+
+从 gradlePluginPortal（延迟的，需要通过审核）：
 
 .build.gradle
 [source%nowrap,gradle,subs="specialchars,attributes"]
@@ -64,22 +84,6 @@ buildscript {
 apply plugin: "io.github.peacetrue.gradle.build-convention"
 ----
 
-或者：
-
-.build.gradle
-[source%nowrap,gradle,subs="specialchars,attributes"]
-----
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath "com.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
-    }
-}
-
-apply plugin: "io.github.peacetrue.gradle.build-convention"
-----
 
 最新版本请查看页面顶部版本徽章。
 
