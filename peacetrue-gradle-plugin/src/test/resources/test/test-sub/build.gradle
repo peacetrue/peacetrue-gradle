@@ -15,5 +15,5 @@ buildscript {
 */
 
 plugins {
-    id 'io.github.peacetrue.gradle.build-convention'
+    id 'io.github.peacetrue.build-convention'
 }

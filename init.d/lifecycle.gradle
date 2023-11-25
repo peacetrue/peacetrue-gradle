@@ -20,10 +20,10 @@ gradle.rootProject {
 gradle.allprojects {
     println("gradle.allprojects: $it")
     it.beforeEvaluate {
-        println("gradle.beforeEvaluate: $it")
+        println("project.beforeEvaluate: $it")
     }
     it.afterEvaluate {
-        println("gradle.afterEvaluate: $it")
+        println("project.afterEvaluate: $it")
     }
 }
 

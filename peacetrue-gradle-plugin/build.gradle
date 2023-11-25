@@ -6,7 +6,7 @@ plugins {
 }
 
 // Group id must not start with 'com.github', it should be replaced with 'io.github'
-group "io.github.peacetrue.gradle"
+group "io.github.peacetrue"
 description "java build convention plugin"
 
 repositories {
@@ -34,10 +34,6 @@ dependencies {
     testImplementation 'org.apache.commons:commons-io:1.3.2'
 }
 
-test {
-    useJUnitPlatform()
-}
-
 gradlePlugin {
     vcsUrl = "https://github.com/peacetrue/peacetrue-gradle.git"
     website = "https://github.com/peacetrue/peacetrue-gradle"
@@ -49,15 +45,6 @@ gradlePlugin {
             implementationClass = "com.github.peacetrue.gradle.plugin.BuildConventionPlugin"
             tags.set(["peacetrue", "java", "build", "convention", "test"])
         }
-
-/*
-        testArtifactsPlugin {
-            id = "${group}.test-artifacts"
-            displayName = "peacetrue test artifacts plugin"
-            description = "Test source code can be used as a dependent class library"
-            implementationClass = "com.github.peacetrue.gradle.plugin.TestArtifactsPlugin"
-        }
-*/
     }
 }
 

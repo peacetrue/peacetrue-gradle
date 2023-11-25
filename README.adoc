@@ -52,7 +52,7 @@ buildscript {
     }
 }
 
-apply plugin: "io.github.peacetrue.gradle.build-convention"
+apply plugin: "io.github.peacetrue.build-convention"
 ----
 
 From the gradlePluginPortal (delayed, subject to approval):
@@ -61,7 +61,7 @@ From the gradlePluginPortal (delayed, subject to approval):
 [source%nowrap,gradle,subs="specialchars,attributes"]
 ----
 plugins {
-    id "io.github.peacetrue.gradle.build-convention" version "\{latest-version}"
+    id "io.github.peacetrue.build-convention" version "\{latest-version}"
 }
 ----
 
@@ -75,11 +75,11 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "io.github.peacetrue.gradle:peacetrue-gradle-plugin:\{latest-version}"
+        classpath "io.github.peacetrue:peacetrue-gradle-plugin:\{latest-version}"
     }
 }
 
-apply plugin: "io.github.peacetrue.gradle.build-convention"
+apply plugin: "io.github.peacetrue.build-convention"
 ----
 
 Check the version badge at the top of the page for the latest version.

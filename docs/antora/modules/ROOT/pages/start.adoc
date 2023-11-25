@@ -8,7 +8,7 @@ plugins 模式：
 [source%nowrap,gradle,subs="specialchars,attributes"]
 ----
 plugins {
-    id "io.github.peacetrue.gradle.build-convention" version "\{latest-version}"
+    id "io.github.peacetrue.build-convention" version "\{latest-version}"
 }
 ----
 
@@ -26,5 +26,5 @@ buildscript {
     }
 }
 
-apply plugin: "io.github.peacetrue.gradle.build-convention"
+apply plugin: "io.github.peacetrue.build-convention"
 ----

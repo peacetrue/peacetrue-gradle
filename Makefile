@@ -16,9 +16,9 @@ manual-test-asciidoctor: peacetrue-gradle-plugin
 
 # 切换
 switch.maven:
-	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle && ln src/test/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties
+	cd peacetrue-gradle-plugin && rm -rf build.gradle && ln build.mavenCentral.gradle build.gradle && ln src/test/resources/META-INF/gradle-plugins/io.github.peacetrue.build-convention.properties src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.build-convention.properties
 switch.gradle:
-	cd peacetrue-gradle-plugin && rm -rf build.gradle src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties && ln build.gradlePluginPortal.gradle build.gradle
+	cd peacetrue-gradle-plugin && rm -rf build.gradle src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.build-convention.properties && ln build.gradlePluginPortal.gradle build.gradle
 
 projects=gradle dependencies test beans common cryptography spring validation servlet persistence result tplngn template openapitools
 #projects=user
