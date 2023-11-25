@@ -38,7 +38,7 @@ Minimum supported versions:
 
 == Usage
 
-From the mavenCentral repository (real-time):
+From the mavenCentral (real-time):
 
 .build.gradle
 [source%nowrap,gradle,subs="specialchars,attributes"]

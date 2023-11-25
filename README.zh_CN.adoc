@@ -39,7 +39,7 @@ NOTE: 资源库可能包含一个项目或多个项目，如果只包含一个�
 
 == 用法（How）
 
-从 mavenCentral 资源库（实时的）：
+从 mavenCentral（实时的）：
 
 .build.gradle
 [source%nowrap,gradle,subs="specialchars,attributes"]
