@@ -35,19 +35,21 @@ jobs:
           arguments: build
 
       - uses: testspace-com/setup-testspace@v1
-        if: ${{ always() }}
         with:
           domain: ${{github.repository_owner}}
-      #          token: ${{ secrets.TESTSPACE_TOKEN }} # optional, only required for private repos
+      # token: ${{ secrets.TESTSPACE_TOKEN }} # optional, only required for private repos
 
       - name: Publish Results to Testspace
         run: testspace "build/test-results/test/*.xml" "build/reports/jacoco/test/jacocoTestReport.xml"
 
-      - name: Publish Results to Testspace
-        #        https://docs.github.com/en/actions/learn-github-actions/expressions#status-check-functions
-        if: ${{ failure() }}
-        run: testspace "*/build/reports/tests/test" "*/build/reports/jacoco/test/html"
+      # https://github.com/marketplace/actions/junit-report-action
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: failure()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
 
+      # https://docs.github.com/en/actions/learn-github-actions/expressions#status-check-functions
       #https://github.com/marketplace/actions/codecov
       - name: Codecov
         uses: codecov/codecov-action@v3.1.0
