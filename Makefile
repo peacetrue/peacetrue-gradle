@@ -21,7 +21,12 @@ switch.gradle:
 	cd peacetrue-gradle-plugin && rm -rf build.gradle src/main/resources/META-INF/gradle-plugins/io.github.peacetrue.gradle.build-convention.properties && ln build.gradlePluginPortal.gradle build.gradle
 
 projects=gradle dependencies test beans common cryptography spring validation servlet persistence result tplngn template openapitools
-projects=gradle
+#projects=user
+
+group: $(addprefix group.,$(projects));
+group.%:
+	cd "$(workingDir)/peacetrue-$*" && sed -i 's/peaceGradleVersion=1.1.3/peaceGradleVersion=1.2.0/' gradle.properties
+	cd "$(workingDir)/peacetrue-$*" && sed -i 's/com.github.peacetrue.gradle/io.github.peacetrue.gradle/' *.gradle
 
 # 发布到本地
 publishToMavenLocal: $(addprefix publishToMavenLocal.,$(projects));

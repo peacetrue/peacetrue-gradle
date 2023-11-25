@@ -9,7 +9,10 @@ import org.gradle.api.artifacts.dsl.DependencyHandler;
 import org.gradle.api.artifacts.dsl.RepositoryHandler;
 import org.gradle.api.file.Directory;
 import org.gradle.api.logging.Logger;
-import org.gradle.api.plugins.*;
+import org.gradle.api.plugins.JavaLibraryPlugin;
+import org.gradle.api.plugins.JavaPluginExtension;
+import org.gradle.api.plugins.PluginContainer;
+import org.gradle.api.plugins.TestReportAggregationPlugin;
 import org.gradle.api.provider.Provider;
 import org.gradle.api.tasks.TaskContainer;
 import org.gradle.api.tasks.compile.JavaCompile;
@@ -319,23 +322,20 @@ public class BuildConventionPlugin implements Plugin<Project> {
         for (Project subproject : project.getSubprojects()) {
             prepareSubproject(subproject);
             applyMultiChild(subproject);
+            subproject.afterEvaluate(ignored -> {
+                if (!subproject.hasProperty("skipTest")) {
+                    // 用于主项目中生成覆盖率测试
+                    project.getDependencies().add(IMPLEMENTATION_CONFIGURATION_NAME, subproject);
+                }
+            });
         }
 
         // 项目 build.gradle 执行完后，项目的 mvn 坐标属性 已设置，然后设置子项目的 mvn 坐标属性。
         project.afterEvaluate(it -> {
             for (Project subproject : it.getSubprojects()) {
-                subproject.beforeEvaluate(ignored -> {
-                    subproject.setGroup(project.getGroup());
-                    subproject.setVersion(project.getVersion());
-                    subproject.setDescription(project.getDescription());
-                });
-
-                subproject.afterEvaluate(ignored -> {
-                    if (!subproject.hasProperty("skipTest")) {
-                        // 用于主项目中生成覆盖率测试
-                        project.getDependencies().add(IMPLEMENTATION_CONFIGURATION_NAME, subproject);
-                    }
-                });
+                subproject.setGroup(project.getGroup());
+                subproject.setVersion(project.getVersion());
+                subproject.setDescription(project.getDescription());
             }
         });
     }

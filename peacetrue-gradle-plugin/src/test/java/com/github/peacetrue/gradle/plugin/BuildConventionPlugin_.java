@@ -35,6 +35,7 @@ import static org.gradle.api.plugins.JavaPlugin.*;
  *
  * @author peace
  **/
+@Deprecated
 public class BuildConventionPlugin_ implements Plugin<Project> {
 
     private static final String PEACETRUE_DEPENDENCIES_ENABLED = "peacetrueDependenciesEnabled";

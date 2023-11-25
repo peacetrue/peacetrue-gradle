@@ -11,7 +11,7 @@ image:https://img.shields.io/codecov/c/github/peacetrue/{app-name}/master["Codec
 image:https://img.shields.io/nexus/r/{app-group}/peacetrue-gradle-plugin?label=peacetrue-gradle-plugin&server=https%3A%2F%2Foss.sonatype.org%2F["peacetrue-gradle-plugin",link="https://search.maven.org/search?q=peacetrue-gradle-plugin"]
 
 //@formatter:off
-link:docs/antora/modules/ROOT/pages/index.adoc[中文]
+link:README.zh_CN.adoc[中文]
 
 == Introduction
 

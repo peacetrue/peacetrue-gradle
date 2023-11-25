@@ -9,10 +9,9 @@ import org.junit.jupiter.api.Test;
 /**
  * @author peace
  **/
-@Disabled
+@Deprecated
 class TestArtifactsPluginTest {
 
-    @Test
     void apply() {
         Project project = ProjectBuilder.builder().build();
         project.getPluginManager().apply(TestArtifactsPlugin.class);
