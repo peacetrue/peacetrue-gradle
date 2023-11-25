@@ -31,8 +31,9 @@ import java.util.Map;
 @Slf4j
 class BuildConventionPluginTest {
 
+    // org.junit.jupiter.api.extension.ExtensionConfigurationException: @TempDir field [private java.io.File com.github.peacetrue.gradle.plugin.BuildConventionPluginFunctionTest.projectDir] must not be private.
     @TempDir
-    private File testProjectDir;
+    File testProjectDir;
 
     private Project rootProject() {
         Project project = ProjectBuilder.builder()
@@ -85,7 +86,7 @@ class BuildConventionPluginTest {
         setProperties(project);
         project.getPluginManager().apply(BuildConventionPlugin.class);
         ((ProjectInternal) project).evaluate();
-        Assertions.assertDoesNotThrow(() -> executeTask(project, "build"),"execute plugin in root project");
+        Assertions.assertDoesNotThrow(() -> executeTask(project, "build"), "execute plugin in root project");
         Assertions.assertEquals(project.getGroup(), subproject.getGroup());
         Assertions.assertEquals(project.getDescription(), subproject.getDescription());
     }

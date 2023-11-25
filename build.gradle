@@ -5,6 +5,6 @@ plugins {
 
 group "com.github.peacetrue.gradle"
 version "${peaceGradleVersion}${tailSnapshot}"
-description "Gradle 扩展"
+description "used to extend Gradle"
 
 apply plugin: "com.github.peacetrue.gradle.build-convention"

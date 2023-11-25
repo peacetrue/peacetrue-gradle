@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 class BuildConventionPluginFunctionTest {
     @TempDir
-    private File projectDir;
+    File projectDir;
     private File settingsFile;
     private File buildFile;
     private File propertiesFile;

@@ -1,3 +1,19 @@
+/*
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.7.14'
+        classpath 'org.openapitools:openapi-generator-gradle-plugin:6.6.0'
+        classpath 'org.asciidoctor:asciidoctor-gradle-jvm:3.3.2'
+        classpath 'org.springdoc:springdoc-openapi-gradle-plugin:1.8.0'
+    }
+}
+*/
+
 plugins {
     id 'io.github.peacetrue.gradle.build-convention'
 }
