@@ -7,8 +7,11 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
+# https://github.com/mikepenz/action-junit-report/issues/23
 permissions:
   contents: read
+  checks: write
+  id-token: write
 
 jobs:
   build:
@@ -42,6 +45,7 @@ jobs:
       - name: Publish Results to Testspace
         run: testspace "build/test-results/test/*.xml" "build/reports/jacoco/test/jacocoTestReport.xml"
 
+      # https://github.com/gradle/gradle-build-action/issues/619
       # https://github.com/marketplace/actions/junit-report-action
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v4
