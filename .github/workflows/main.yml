@@ -46,7 +46,7 @@ jobs:
       - name: Publish Results to Testspace
         #        https://docs.github.com/en/actions/learn-github-actions/expressions#status-check-functions
         if: ${{ failure() }}
-        run: testspace "*/build/test-results/test/*.xml" "*/build/reports/jacoco/test/jacocoTestReport.xml"
+        run: testspace "*/build/reports/tests/test" "*/build/reports/jacoco/test/html"
 
       #https://github.com/marketplace/actions/codecov
       - name: Codecov
